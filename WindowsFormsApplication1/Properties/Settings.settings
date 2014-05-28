@@ -1,0 +1,206 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="WindowsFormsApplication1.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="sqlite_db" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DROP TABLE IF EXISTS DOCUMENTS;
+CREATE TABLE Documents (dID INT NOT NULL, medieNumber INT NOT NULL, relativePath TEXT NOT NULL, pID INT, 
+originalFileName TEXT, originalExtension TEXT, archiveExtension TEXT, gmlXSD TEXT, testResults TEXT,
+PRIMARY KEY  (medieNumber,relativePath, dID));
+
+DROP TABLE IF EXISTS CONTEXTDOCUMENTATIONDOCUMENTS;
+CREATE TABLE CONTEXTDOCUMENTATIONDOCUMENTS (dID INT NOT NULL, medieNumber INT NOT NULL, relativePath TEXT NOT NULL, 
+originalFileName TEXT, archiveExtension TEXT, docDescription TEXT, docDate TEXT, testResults TEXT, 
+PRIMARY KEY  (medieNumber,relativePath, dID));
+
+
+
+DROP TABLE IF EXISTS columns;
+CREATE TABLE columns (colNumber TEXT NOT NULL,  tableName TEXT NOT NULL, colName TEXT NOT NULL, 
+colType TEXT NOT NULL, colOriginalType TEXT NULL, defaultValue TEXT NULL, nullAble TEXT NOT NULL, colDescription TEXT NOT NULL, PRIMARY KEY(colName, tableName)); 
+
+
+DROP TABLE IF EXISTS tables;
+Create table tables (tableName text NOT NULL PRIMARY KEY, folder text NOT NULL, description text NOT NULL, rows int NOT NULL, countedRows int NOT NULL, 
+medianumber int NOT NULL, relativePath text NOT NULL, priority int NOT NULL);
+
+DROP TABLE IF EXISTS constraintNames;
+CREATE TABLE constraintNames (constraintName TEXT NOT NULL PRIMARY KEY, tableName TEXT, constraintType TEXT, recursive TEXT);
+
+
+DROP TABLE IF EXISTS constraintColumns;
+CREATE TABLE constraintColumns (constraintColumnName TEXT NOT NULL , constraintName TEXT NOT NULL, tableName TEXT, count TEXT, PRIMARY KEY(constraintColumnName ,constraintName ) ); 
+
+
+DROP TABLE IF EXISTS referencedColumns;
+CREATE TABLE referencedColumns (referencedColumnName TEXT NOT NULL ,  constraintName TEXT NOT NULL, referencedTableName TEXT,  count TEXT, PRIMARY KEY(referencedColumnName , constraintName ) ); 
+
+
+DROP TABLE IF EXISTS  functionalDescription;
+CREATE TABLE funcTionalDescription (tableName TEXT NOT NULL, colNumber TEXT NOT NULL, functionalDescription TEXT NOT NULL, 
+PRIMARY KEY(colNumber, tableName));
+
+
+DROP TABLE IF EXISTS  Files;
+CREATE TABLE Files
+(mediaNumber INTEGER NOT NULL, relativePath TEXT NOT NULL, [fileName] TEXT NOT NULL, extension TEXT, md5 TEXT, size TEXT, 
+IDnumFileType INTEGER, [timeStamp] TEXT, PRIMARY KEY (mediaNumber, relativePath, [fileName], extension));
+
+
+DROP TABLE IF EXISTS  Media;
+CREATE TABLE Media(mediaNumber INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, hasDocuments TEXT, hasTables TEXT);
+
+
+DROP TABLE IF EXISTS  FileType;
+CREATE TABLE FileType (IDnumFileType INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, FileType TEXT NOT NULL); 
+INSERT INTO FileType(FileType) VALUES('Index');
+INSERT INTO FileType(FileType) VALUES('IndexXSD');
+INSERT INTO FileType(FileType) VALUES('Document');
+INSERT INTO FileType(FileType) VALUES('Documentation');
+INSERT INTO FileType(FileType) VALUES('Table');
+INSERT INTO FileType(FileType) VALUES('TableXSD');
+INSERT INTO FileType(FileType) VALUES('GML');
+INSERT INTO FileType(FileType) VALUES('GMLxsd');
+
+DROP TABLE IF EXISTS  FunctionalDescriptionType;
+CREATE TABLE FunctionalDescriptionType (IDfunctionalDescriptionType INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, functionalDescriptionType TEXT NOT NULL); 
+
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Myndighedsindentifikation');
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Dokumentidentifikation');	
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Lagringsform');
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Afleveret');
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Sagsidentifikation');
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Sagstitel');
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Dokumenttitel');			
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Dokumentdato');				
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Afsender_modtager');
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Digital_signatur');
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('FORM');
+INSERT INTO FunctionalDescriptionType(functionalDescriptionType) VALUES('Kassation');
+
+
+DROP TABLE IF EXISTS views;
+CREATE TABLE views (viewName TEXT NOT NULL PRIMARY KEY, view TEXT, description TEXT);
+
+
+DROP TABLE IF EXISTS  Settings;
+CREATE TABLE Settings (settingsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,structureTest INTEGER NOT NULL, 
+parserSettings INTEGER NOT NULL, tabelTest INTEGER NOT NULL, documentsTest INTEGER NOT NULl, constraintTest INTEGER NOT NULL);
+
+
+DROP TABLE IF EXISTS  TestLog;
+CREATE TABLE TestLog (logID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, mediaNumber INTEGER NOT NULL, relativePath TEXT NOT NULL, [fileName] TEXT NOT NULL, 
+testCode INTEGER, errorCode INTEGER, errorCodePosOrCount INTEGER, errorText TEXT, accumulated INTEGER, [timeStamp] TEXT);  
+
+DROP TABLE IF EXISTS Info;
+CREATE TABLE Info(Key VARCHAR(20),Value VARCHAR(20));
+INSERT INTO Info(Key, Value) VALUES("DBVersion", "{0}");
+
+
+DROP TABLE IF EXISTS archiveIndex;
+CREATE TABLE archiveIndex
+(
+		archiveInformationPackageID TEXT PRIMARY KEY,
+		archiveInformationPackageIDPrevious TEXT NULL,
+		archivePeriodStart TEXT NOT NULL,
+		archivePeriodEnd TEXT NOT NULL,
+		archiveInformationPacketType TEXT NOT NULL,
+		archiveType TEXT NOT NULL,
+		systemName TEXT NOT NULL,
+		systemPurpose TEXT NOT NULL,
+		systemContent TEXT NOT NULL,
+		regionNum TEXT NOT NULL,
+		komNum TEXT NOT NULL,
+		cprNum TEXT NOT NULL,
+		cvrNum TEXT NOT NULL,
+		matrikNum TEXT NOT NULL,
+		bbrNum TEXT NOT NULL,
+		whoSygKod TEXT NOT NULL,
+		containsDigitalDocuments TEXT NOT NULL,
+		searchRelatedOtherRecords TEXT NOT NULL,
+		systemFileConcept TEXT NOT NULL,
+		multipleDataCollection TEXT NOT NULL,
+		personalDataRestrictedInfo TEXT NOT NULL,
+		otherAccessTypeRestrictions TEXT NOT NULL,
+		archiveApproval TEXT NOT NULL,
+		archiveRestrictions TEXT NULL
+);
+
+DROP TABLE IF EXISTS form;
+CREATE TABLE form
+(
+		formVersion TEXT PRIMARY KEY,
+		archiveInformationPackageID TEXT NULL,
+		FOREIGN KEY(archiveInformationPackageID) REFERENCES archiveIndex(archiveInformationPackageID)	 
+);
+
+DROP TABLE IF EXISTS archiveCreatorList;
+CREATE TABLE archiveCreatorList
+(
+		archiveCreatorID INTEGER PRIMARY KEY AUTOINCREMENT,
+		creatorName TEXT NOT NULL,
+		creationPeriodStart TEXT NULL,
+		creationPeriodEnd TEXT NOT NULL,
+		archiveInformationPackageID TEXT NOT NULL,
+		FOREIGN KEY(archiveInformationPackageID) REFERENCES archiveIndex(archiveInformationPackageID)	 
+);
+
+DROP TABLE IF EXISTS classList;
+CREATE TABLE classList
+(
+		formClass TEXT PRIMARY KEY,
+		formClassTEXT TEXT NOT NULL,
+		formVersion TEXT NULL,
+		FOREIGN KEY(formVersion) REFERENCES form(formVersion)	
+);
+
+DROP TABLE IF EXISTS alternativeNames;
+CREATE TABLE alternativeNames
+(
+	  alternativeName TEXT NULL,
+	  archiveInformationPackageID TEXT NOT NULL,	
+		FOREIGN KEY(archiveInformationPackageID) REFERENCES archiveIndex(archiveInformationPackageID)	
+);
+
+DROP TABLE IF EXISTS sourceNames;
+CREATE TABLE sourceNames
+(
+	  sourceName TEXT NULL,
+	  archiveInformationPackageID TEXT NOT NULL,	
+		FOREIGN KEY(archiveInformationPackageID) REFERENCES archiveIndex(archiveInformationPackageID)	
+);
+
+DROP TABLE IF EXISTS userNames;
+CREATE TABLE userNames
+(
+	  userName TEXT NULL,
+	  archiveInformationPackageID TEXT NOT NULL,	
+		FOREIGN KEY(archiveInformationPackageID) REFERENCES archiveIndex(archiveInformationPackageID)	
+);
+
+DROP TABLE IF EXISTS predecessorNames;
+CREATE TABLE predecessorNames
+(
+	  predecessorName TEXT NULL,
+	  archiveInformationPackageID TEXT NOT NULL,	
+		FOREIGN KEY(archiveInformationPackageID) REFERENCES archiveIndex(archiveInformationPackageID)	
+);
+
+DROP TABLE IF EXISTS relatedRecordsNames;
+CREATE TABLE relatedRecordsNames
+(
+	  relatedRecordsName TEXT NULL,
+	  archiveInformationPackageID TEXT NOT NULL,	
+		FOREIGN KEY(archiveInformationPackageID) REFERENCES archiveIndex(archiveInformationPackageID)	
+);
+
+DROP TABLE IF EXISTS adaViews;
+CREATE TABLE adaViews
+(
+	  viewName TEXT NOT NULL,
+	  query TEXT NOT NULL	
+);
+</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
