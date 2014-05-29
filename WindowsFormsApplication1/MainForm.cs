@@ -29,28 +29,29 @@ namespace WindowsFormsApplication1
         {
             //create database
             _xml = new StringBuilder();
-            _xml.AppendLine("<ComponentGroup Id='ProductComponents' Directory='INSTALLFOLDER'>");
-            _avPath = @"C:\Users\ramidi\Documents\GitHub\ADA3\Ada GUI\bin\Debug";
-            _dif = new DirectoryInfo(_avPath);
-            textBoxAVVer.Text = _dif.Name;
-            _replace = _avPath;
-            this.textBoxReplace.Text = _replace;
+            _xml.AppendLine("<Fragment>" + Environment.NewLine+"\t<ComponentGroup Id='ProductComponents' Directory='INSTALLFOLDER'>");
+           // _avPath = @"C:\Users\ramidi\Documents\GitHub\ADA3\Ada GUI\bin\Debug";
+            //_dif = new DirectoryInfo();
+           // textBoxFileSrcDirPath.Text = _dif.Name;
+            //_replace = _avPath;
+           // this.textBoxReplace.Text = _replace;
             this.textBoxReplaceWith.Text = "$(var.DebugDir)";
+            folderBrowserDialogAVVer.SelectedPath = @"C:\Users\Administrator\Documents\GitHub\FileZillaUserCreator\Linq2XmlBasics\bin\Debug";
         }
 
         private void buttonDirBrowse_Click(object sender, EventArgs e)
         {
             try
             {
-                textBoxAVVer.Text = "";
+                textBoxFileSrcDirPath.Text = "";
 
                 if (folderBrowserDialogAVVer.ShowDialog() == DialogResult.OK)
                 {
                     _avPath = folderBrowserDialogAVVer.SelectedPath;
                     _dif = new DirectoryInfo(_avPath);
-                    textBoxAVVer.Text = _dif.Name;
-                  //  treeViewAV.AfterSelect += treeViewAV_AfterSelect;
-                    
+                   // _replace = _avPath;
+                    textBoxFileSrcDirPath.Text = _avPath;
+                    textBoxReplace.Text = _avPath;
                 }
             }
             catch (Exception)
@@ -91,7 +92,6 @@ namespace WindowsFormsApplication1
             catch (Exception exc)
             {
                 Console.WriteLine("Exception "+ exc.Message);
-                throw;
             }
            
         }
@@ -99,11 +99,32 @@ namespace WindowsFormsApplication1
         private void AddNewXmlComponent(FileInfo fileInfo)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("\t<Component Id='CMP_" + SanitiseComponentID(fileInfo.Name) + "_" + _count + "' Guid='" +
+            sb.AppendLine("\t\t<Component Id='CMP_" + SanitiseComponentID(fileInfo.Name) + "_" + _count + "' Guid='" +
                           Guid.NewGuid().ToString().ToUpper() + "'>");
-            sb.AppendLine("\t\t<File Id='FIL_" + SanitiseComponentID(fileInfo.Name) + "_"+_count+"' KeyPath='yes' Source='" +
-                          fileInfo.FullName.Replace(_replace.Trim() , this.textBoxReplaceWith.Text.Trim()) + "' />");
-            sb.AppendLine("\t</Component>" + Environment.NewLine);
+            try
+            {
+                string fileId = SanitiseComponentID(fileInfo.Name);
+                string source = fileInfo.FullName.Replace(_replace.Trim(), this.textBoxReplaceWith.Text.Trim());
+
+                sb.AppendLine("\t\t\t<File Id='FIL_" + fileId + "_" + _count + "' KeyPath='yes' Source='" + source + "' />");
+            
+            }
+            catch(Exception exc)
+            {
+               // throw;
+            }
+
+            try
+            {
+                sb.AppendLine("\t\t</Component>" + Environment.NewLine);
+            }
+            catch (Exception exc)
+            {
+                
+                throw;
+            }
+
+
             _xml.Append(sb.ToString());
         }
 
@@ -125,18 +146,53 @@ namespace WindowsFormsApplication1
 
         private void buttonTestRun_Click(object sender, EventArgs e)
         {
-            this.treeViewAV.Nodes.Clear();
-            TreeNodeCollection collection = this.treeViewAV.Nodes;
-            FillDirectoryTreeView(_dif, collection);
+            if (_dif!=null)
+            {
+                this.treeViewAV.Nodes.Clear();
+                TreeNodeCollection collection = this.treeViewAV.Nodes;            
+                _replace = this.textBoxReplace.Text.Trim();
+                FillDirectoryTreeView(_dif, collection);
 
-            _xml.AppendLine("</ComponentGroup>");
-            this.textBoxGeneratedString.Text = _xml.ToString();
+                _xml.AppendLine("\t</ComponentGroup>" + Environment.NewLine + "</Fragment>");
+                this.textBoxGeneratedString.Text = _xml.ToString();
+
+            }
+            else
+            {
+                MessageBox.Show("Info", "Root directory is legal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
         }
 
         private string SanitiseComponentID(string name)
         {
             string id = name.Replace("-", "_").Replace(" ", "_").Replace(".","_");
             return id;
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.saveFileDialogFileList.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                this.saveFileDialogFileList.FilterIndex = 1;
+                this.saveFileDialogFileList.RestoreDirectory = true;
+               
+                if (this.saveFileDialogFileList.ShowDialog() == DialogResult.OK)
+                {
+                    using (var writer = new StreamWriter(saveFileDialogFileList.OpenFile()))
+                    {
+                        for (int i = 0; i < this.textBoxGeneratedString.Lines.Length; i++)
+                        {
+                            writer.WriteLine(this.textBoxGeneratedString.Lines[i]);
+                        }
+                    }
+                }               
+            }
+            catch (Exception)
+            {             
+                throw;
+            }
         }
     }
 }

@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBoxAVVer = new System.Windows.Forms.GroupBox();
+            this.groupFileSrcDir = new System.Windows.Forms.GroupBox();
             this.buttonTestRun = new System.Windows.Forms.Button();
             this.buttonDirBrowse = new System.Windows.Forms.Button();
-            this.textBoxAVVer = new System.Windows.Forms.TextBox();
+            this.textBoxFileSrcDirPath = new System.Windows.Forms.TextBox();
             this.folderBrowserDialogAVVer = new System.Windows.Forms.FolderBrowserDialog();
             this.treeViewAV = new System.Windows.Forms.TreeView();
             this.textBoxGeneratedString = new System.Windows.Forms.TextBox();
@@ -40,20 +40,21 @@
             this.labelReplaceWith = new System.Windows.Forms.Label();
             this.textBoxReplaceWith = new System.Windows.Forms.TextBox();
             this.buttonSave = new System.Windows.Forms.Button();
-            this.groupBoxAVVer.SuspendLayout();
+            this.saveFileDialogFileList = new System.Windows.Forms.SaveFileDialog();
+            this.groupFileSrcDir.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBoxAVVer
+            // groupFileSrcDir
             // 
-            this.groupBoxAVVer.Controls.Add(this.buttonTestRun);
-            this.groupBoxAVVer.Controls.Add(this.buttonDirBrowse);
-            this.groupBoxAVVer.Controls.Add(this.textBoxAVVer);
-            this.groupBoxAVVer.Location = new System.Drawing.Point(12, 12);
-            this.groupBoxAVVer.Name = "groupBoxAVVer";
-            this.groupBoxAVVer.Size = new System.Drawing.Size(769, 75);
-            this.groupBoxAVVer.TabIndex = 0;
-            this.groupBoxAVVer.TabStop = false;
-            this.groupBoxAVVer.Text = "AV Vesion";
+            this.groupFileSrcDir.Controls.Add(this.buttonTestRun);
+            this.groupFileSrcDir.Controls.Add(this.buttonDirBrowse);
+            this.groupFileSrcDir.Controls.Add(this.textBoxFileSrcDirPath);
+            this.groupFileSrcDir.Location = new System.Drawing.Point(12, 12);
+            this.groupFileSrcDir.Name = "groupFileSrcDir";
+            this.groupFileSrcDir.Size = new System.Drawing.Size(769, 75);
+            this.groupFileSrcDir.TabIndex = 0;
+            this.groupFileSrcDir.TabStop = false;
+            this.groupFileSrcDir.Text = "File sorce  directory";
             // 
             // buttonTestRun
             // 
@@ -75,12 +76,12 @@
             this.buttonDirBrowse.UseVisualStyleBackColor = true;
             this.buttonDirBrowse.Click += new System.EventHandler(this.buttonDirBrowse_Click);
             // 
-            // textBoxAVVer
+            // textBoxFileSrcDirPath
             // 
-            this.textBoxAVVer.Location = new System.Drawing.Point(15, 19);
-            this.textBoxAVVer.Name = "textBoxAVVer";
-            this.textBoxAVVer.Size = new System.Drawing.Size(703, 20);
-            this.textBoxAVVer.TabIndex = 0;
+            this.textBoxFileSrcDirPath.Location = new System.Drawing.Point(15, 19);
+            this.textBoxFileSrcDirPath.Name = "textBoxFileSrcDirPath";
+            this.textBoxFileSrcDirPath.Size = new System.Drawing.Size(703, 20);
+            this.textBoxFileSrcDirPath.TabIndex = 0;
             // 
             // treeViewAV
             // 
@@ -138,11 +139,12 @@
             this.buttonSave.TabIndex = 7;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(999, 703);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.labelReplaceWith);
@@ -151,11 +153,15 @@
             this.Controls.Add(this.textBoxReplace);
             this.Controls.Add(this.textBoxGeneratedString);
             this.Controls.Add(this.treeViewAV);
-            this.Controls.Add(this.groupBoxAVVer);
+            this.Controls.Add(this.groupFileSrcDir);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1015, 741);
+            this.MinimumSize = new System.Drawing.Size(1015, 741);
             this.Name = "MainForm";
-            this.Text = "AV Test";
-            this.groupBoxAVVer.ResumeLayout(false);
-            this.groupBoxAVVer.PerformLayout();
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Text = "File harvester";
+            this.groupFileSrcDir.ResumeLayout(false);
+            this.groupFileSrcDir.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -163,10 +169,10 @@
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBoxAVVer;
+        private System.Windows.Forms.GroupBox groupFileSrcDir;
         private System.Windows.Forms.Button buttonTestRun;
         private System.Windows.Forms.Button buttonDirBrowse;
-        private System.Windows.Forms.TextBox textBoxAVVer;
+        private System.Windows.Forms.TextBox textBoxFileSrcDirPath;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialogAVVer;
         private System.Windows.Forms.TreeView treeViewAV;
         private System.Windows.Forms.TextBox textBoxGeneratedString;
@@ -175,6 +181,7 @@
         private System.Windows.Forms.Label labelReplaceWith;
         private System.Windows.Forms.TextBox textBoxReplaceWith;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogFileList;
     }
 }
 
