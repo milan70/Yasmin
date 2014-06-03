@@ -83,6 +83,7 @@ namespace WindowsFormsApplication1
                     }
    
                 }
+
                 foreach (DirectoryInfo subDir in diff.GetDirectories()) 
                 {
                     FillDirectoryTreeView(subDir,currentNode.Nodes);
@@ -146,22 +147,19 @@ namespace WindowsFormsApplication1
 
         private void buttonTestRun_Click(object sender, EventArgs e)
         {
-            if (_dif!=null)
-            {
-                this.treeViewAV.Nodes.Clear();
-                TreeNodeCollection collection = this.treeViewAV.Nodes;            
-                _replace = this.textBoxReplace.Text.Trim();
-                FillDirectoryTreeView(_dif, collection);
 
-                _xml.AppendLine("\t</ComponentGroup>" + Environment.NewLine + "</Fragment>");
-                this.textBoxGeneratedString.Text = _xml.ToString();
-
-            }
-            else
+            try
             {
-                MessageBox.Show("Info", "Root directory is legal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (!this.backgroundWorker1.IsBusy)
+                {
+                    backgroundWorker1.RunWorkerAsync();
+                }
             }
-            
+            catch (Exception)
+            {
+                
+                throw;
+            }
         }
 
         private string SanitiseComponentID(string name)
@@ -192,6 +190,55 @@ namespace WindowsFormsApplication1
             catch (Exception)
             {             
                 throw;
+            }
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            for (int i = 1; (i <= 10); i++)
+            {
+                if (worker.CancellationPending == true)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                else
+                {
+                    // Perform a time consuming operation.
+                    if (_dif != null)
+                    {
+                        this.treeViewAV.Nodes.Clear();
+                        TreeNodeCollection collection = this.treeViewAV.Nodes;
+                        _replace = this.textBoxReplace.Text.Trim();
+                        Console.WriteLine("Runing shit!!");
+                        FillDirectoryTreeView(_dif, collection);
+                        
+                    }
+                    else
+                    {
+                        MessageBox.Show("Info", "Root directory is legal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }                  
+                }
+            }          
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if ((e.Cancelled == true))
+            {
+               // this.tbProgress.Text = "Canceled!";
+            }
+            else if (!(e.Error == null))
+            {
+               // this.tbProgress.Text = ("Error: " + e.Error.Message);
+            }
+            else
+            {
+                _xml.AppendLine("\t</ComponentGroup>" + Environment.NewLine + "</Fragment>");
+                this.textBoxGeneratedString.Text = _xml.ToString();
             }
         }
     }

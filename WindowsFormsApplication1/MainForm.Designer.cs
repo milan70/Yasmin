@@ -41,6 +41,7 @@
             this.textBoxReplaceWith = new System.Windows.Forms.TextBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.saveFileDialogFileList = new System.Windows.Forms.SaveFileDialog();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupFileSrcDir.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -141,6 +142,11 @@
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -182,6 +188,7 @@
         private System.Windows.Forms.TextBox textBoxReplaceWith;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.SaveFileDialog saveFileDialogFileList;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 
