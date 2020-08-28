@@ -30,13 +30,8 @@ namespace WindowsFormsApplication1
             //create database
             _xml = new StringBuilder();
             _xml.AppendLine("<Fragment>" + Environment.NewLine+"\t<ComponentGroup Id='ProductComponents' Directory='INSTALLFOLDER'>");
-           // _avPath = @"C:\Users\ramidi\Documents\GitHub\ADA3\Ada GUI\bin\Debug";
-            //_dif = new DirectoryInfo();
-           // textBoxFileSrcDirPath.Text = _dif.Name;
-            //_replace = _avPath;
-           // this.textBoxReplace.Text = _replace;
             this.textBoxReplaceWith.Text = "$(var.DebugDir)";
-            folderBrowserDialogAVVer.SelectedPath = @"C:\Users\Administrator\Documents\GitHub\FileZillaUserCreator\Linq2XmlBasics\bin\Debug";
+            folderBrowserDialogAVVer.SelectedPath = @"C:\Projects";
         }
 
         private void buttonDirBrowse_Click(object sender, EventArgs e)
@@ -49,7 +44,6 @@ namespace WindowsFormsApplication1
                 {
                     _avPath = folderBrowserDialogAVVer.SelectedPath;
                     _dif = new DirectoryInfo(_avPath);
-                   // _replace = _avPath;
                     textBoxFileSrcDirPath.Text = _avPath;
                     textBoxReplace.Text = _avPath;
                 }
